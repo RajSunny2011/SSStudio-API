@@ -1,0 +1,25 @@
+summary: Register a new user
+description: Registers a user with a username and password.
+consumes:
+  - application/json
+parameters:
+  - in: body
+    name: body
+    required: true
+    schema:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+responses:
+  201:
+    description: User registered
+  400:
+    description: Username or password missing
+  409:
+    description: Username already exists

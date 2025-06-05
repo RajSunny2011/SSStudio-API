@@ -1,0 +1,58 @@
+summary: Synthesize data
+description: Synthesizes tabular data using a model like CTGAN.
+consumes:
+  - application/json
+  - multipart/form-data
+parameters:
+  - in: header
+    name: Authorization
+    type: string
+    required: true
+    description: JWT token with "Bearer" prefix
+  - in: body
+    name: body
+    required: true
+    schema:
+      type: object
+      required:
+        - data
+        - configs
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        configs:
+          type: object
+          required:
+            - model
+          properties:
+            model:
+              type: string
+              example: ctgan
+            discrete_columns:
+              type: array
+              items:
+                type: string
+            epochs:
+              type: integer
+              example: 300 (default)
+            num_rows:
+              type: integer
+              example: 100 (default)
+            enforce_min_max_values:
+              type: boolean
+              example: False (default), True
+            enforce_rounding:
+              type: boolean
+              example: False (default), True
+
+responses:
+  200:
+    description: Synthesized data returned
+  400:
+    description: Bad request or missing data
+  415:
+    description: Unsupported content-type
+  500:
+    description: Server error

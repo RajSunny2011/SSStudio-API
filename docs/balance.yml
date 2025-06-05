@@ -1,0 +1,73 @@
+post:
+  tags:
+    - Balance
+  summary: Balance dataset using sampling techniques
+  description: >
+    Balance a dataset using one of the supported techniques: Random Oversampling, Random Undersampling, SMOTE, or ADASYN.
+  consumes:
+    - application/json
+    - multipart/form-data
+  produces:
+    - application/json
+  parameters:
+    - in: header
+      name: Authorization
+      required: true
+      type: string
+      description: JWT token in "Bearer <token>" format
+
+    - in: body
+      name: balanceRequest
+      required: true
+      schema:
+        type: object
+        required:
+          - data
+          - configs
+        properties:
+          data:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+            example:
+              - feature1: 1.2
+                feature2: 3.4
+                label: 0
+              - feature1: 2.1
+                feature2: 4.5
+                label: 1
+          configs:
+            type: object
+            required:
+              - model
+              - target
+            properties:
+              model:
+                type: string
+                enum: [oversample, undersample, smote, adasyn]
+                example: smote
+              target:
+                type: string
+                example: label
+              random_state:
+                type: integer
+                example: 42
+  responses:
+    200:
+      description: Balanced dataset returned
+      schema:
+        type: object
+        properties:
+          balanced_data:
+            type: array
+            items:
+              type: object
+    400:
+      description: Missing or invalid input
+    401:
+      description: Unauthorized
+    415:
+      description: Unsupported Content-Type
+    500:
+      description: Internal server error
